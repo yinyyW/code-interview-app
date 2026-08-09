@@ -1,3 +1,10 @@
 spring:
   application:
     name: interview
+  datasource:
+    url: jdbc:mysql://localhost:3306/code_interview
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: local
