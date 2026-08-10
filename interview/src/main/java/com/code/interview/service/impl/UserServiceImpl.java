@@ -39,7 +39,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (userPassword.length() < 8 || checkPassword.length() < 8) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码过短");
         }
-        if (userPassword.equals(checkPassword)) {
+        if (!userPassword.equals(checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入的密码不一致");
         }
 
@@ -67,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request) {
+    public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         // 1.校验参数
         if (StrUtil.hasBlank(userAccount, userPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
@@ -86,7 +86,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!PasswordEncoderUtils.matches(userPassword, user.getUserPassword())) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
-        return getLoginUserVO(user);
+        return user;
     }
 
     @Override
@@ -171,7 +171,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String sortField = userQueryRequest.getSortField();
         String sortOrder = userQueryRequest.getSortOrder();
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(id != null, "id", id);
+        queryWrapper.eq(id != null && id > 0, "id", id);
         queryWrapper.eq(StrUtil.isNotBlank(unionId), "unionId", unionId);
         queryWrapper.eq(StrUtil.isNotBlank(mpOpenId), "mpOpenId", mpOpenId);
         queryWrapper.eq(StrUtil.isNotBlank(userRole), "userRole", userRole);

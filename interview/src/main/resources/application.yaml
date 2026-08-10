@@ -8,3 +8,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   profiles:
     active: local
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
