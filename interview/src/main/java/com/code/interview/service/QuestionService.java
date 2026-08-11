@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.spring.service.IService;
 import com.code.interview.model.dto.question.QuestionQueryRequest;
 import com.code.interview.model.entity.Question;
+import com.code.interview.model.entity.User;
 import com.code.interview.model.vo.QuestionVO;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -51,4 +52,13 @@ public interface QuestionService extends IService<Question> {
      * @return
      */
     Page<Question> listQuestionByPage(QuestionQueryRequest questionQueryRequest);
+
+    /**
+     * AI 生成题目
+     * @param questionType 题目类型，比如 Java
+     * @param number 题目数量，比如 10
+     * @param user 创建人
+     * @return ture / false
+     */
+    boolean aiGenerateQuestions(String questionType, int number, User user);
 }
