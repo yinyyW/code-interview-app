@@ -1,2 +1,5 @@
 allowBuilds:
+  core-js: set this to true or false
   es5-ext: true
+overrides:
+  micromark-extension-gfm-footnote: 2.1.0

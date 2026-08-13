@@ -10,6 +10,7 @@ import GlobalFooter from "@/src/components/GlobalFooter";
 import { useAppSelector } from "@/src/hooks/useStoreHooks";
 import Link from "next/link";
 import getAccessibleMenus from "@/src/access/menuAccess";
+import MdEditor from "@/src/components/MdEditor";
 
 export default function ProLayoutClient(props: BasicLayoutProps) {
   const { children } = props;
@@ -59,7 +60,11 @@ export default function ProLayoutClient(props: BasicLayoutProps) {
         )}
         footerRender={() => <GlobalFooter />}
       >
-        <PageContainer>{children}</PageContainer>
+        <PageContainer>
+          <MdEditor value="# 标题\n测试markdown" />
+
+          {children}
+        </PageContainer>
       </ProLayout>
     </div>
   );
