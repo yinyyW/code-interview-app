@@ -13,7 +13,9 @@ export const loginUserSlice = createSlice({
   initialState: DEFAULT_USER,
   reducers: {
     setLoginUser: (state, action: PayloadAction<API.UserVO>) => {
-      state = { ...action.payload };
+      return {
+        ...action.payload,
+      };
     },
   },
 });

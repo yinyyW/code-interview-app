@@ -7,19 +7,16 @@ import { BasicLayoutProps } from ".";
 import Image from "next/image";
 import { menuItems } from "@/src/config/menu";
 import GlobalFooter from "@/src/components/GlobalFooter";
-import { useEffect } from "react";
-import { listQuestionBankVoByPage } from "@/src/api/questionBankController";
+import { useAppSelector } from "@/src/hooks/useStoreHooks";
+import Link from "next/link";
+import getAccessibleMenus from "@/src/access/menuAccess";
 
 export default function ProLayoutClient(props: BasicLayoutProps) {
   const { children } = props;
 
-  const { token } = theme.useToken();
+  const loginUser = useAppSelector((state) => state.loginUser);
 
-  useEffect(() => {
-    listQuestionBankVoByPage({}).then((res) => {
-      console.log("list question banks by page", res);
-    });
-  }, []);
+  const { token } = theme.useToken();
 
   return (
     <div
@@ -27,11 +24,10 @@ export default function ProLayoutClient(props: BasicLayoutProps) {
         overflow: "auto",
         border: `1px solid ${token.colorBorderSecondary}`,
         borderRadius: token.borderRadius,
+        height: "100vh",
       }}
-      className="h-full"
     >
       <ProLayout
-        {...menuItems}
         title="面试鸭刷题平台"
         logo={
           <Image
@@ -47,15 +43,20 @@ export default function ProLayoutClient(props: BasicLayoutProps) {
         fixSiderbar
         // location={{ pathname }}
         avatarProps={{
-          src: "https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg",
+          src:
+            loginUser?.userAvatar ??
+            "https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg",
           size: "small",
-          title: "用户",
+          title: loginUser?.userName ?? "用户",
         }}
         actionsRender={() => [
           <Input key="search" />,
           <GithubFilled key="github" />,
         ]}
-        menuItemRender={(item, dom) => <div>{dom}</div>}
+        menuDataRender={() => getAccessibleMenus(loginUser, menuItems)}
+        menuItemRender={(item, dom) => (
+          <Link href={item.path || "/"}>{dom}</Link>
+        )}
         footerRender={() => <GlobalFooter />}
       >
         <PageContainer>{children}</PageContainer>
