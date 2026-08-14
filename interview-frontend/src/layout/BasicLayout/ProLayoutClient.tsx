@@ -1,28 +1,49 @@
 "use client";
 
-import { GithubFilled } from "@ant-design/icons";
+import { GithubFilled, LogoutOutlined } from "@ant-design/icons";
 import { PageContainer, ProLayout } from "@ant-design/pro-components";
-import { Input, theme } from "antd";
+import { Dropdown, Input, message, theme } from "antd";
 import { BasicLayoutProps } from ".";
 import Image from "next/image";
 import { menuItems } from "@/src/config/menu";
 import GlobalFooter from "@/src/components/GlobalFooter";
-import { useAppSelector } from "@/src/hooks/useStoreHooks";
+import { useAppDispatch, useAppSelector } from "@/src/hooks/useStoreHooks";
 import Link from "next/link";
 import getAccessibleMenus from "@/src/access/menuAccess";
-import MdEditor from "@/src/components/MdEditor";
+import { useRouter } from "next/navigation";
+import { userLogout } from "@/src/api/userController";
+import { ResponseCode } from "@/src/constant/ResponseCode";
+import { DEFAULT_USER, setLoginUser } from "@/src/store/loginUser";
+import { ApiError } from "next/dist/server/api-utils";
 
 export default function ProLayoutClient(props: BasicLayoutProps) {
   const { children } = props;
 
-  const loginUser = useAppSelector((state) => state.loginUser);
-
   const { token } = theme.useToken();
+  const router = useRouter();
+  const loginUser = useAppSelector((state) => state.loginUser);
+  const dispatch = useAppDispatch();
+
+  const handleUserLogout = async () => {
+    try {
+      const result = await userLogout();
+      const resData = result.data;
+      if (resData.code === ResponseCode.OK) {
+        message.success("退出成功");
+        dispatch(setLoginUser(DEFAULT_USER));
+      }
+    } catch (e) {
+      if (e instanceof ApiError) {
+        message.error(`退出失败: ${e.message}`);
+      } else {
+        message.error(`退出失败`);
+      }
+    }
+  };
 
   return (
     <div
       style={{
-        overflow: "auto",
         border: `1px solid ${token.colorBorderSecondary}`,
         borderRadius: token.borderRadius,
         height: "100vh",
@@ -49,6 +70,29 @@ export default function ProLayoutClient(props: BasicLayoutProps) {
             "https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg",
           size: "small",
           title: loginUser?.userName ?? "用户",
+          render: (props, dom) =>
+            loginUser.id ? (
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: "logout",
+                      icon: <LogoutOutlined />,
+                      label: "退出登录",
+                    },
+                  ],
+                  onClick: (menuInfo) => {
+                    if (menuInfo.key === "logout") {
+                      handleUserLogout();
+                    }
+                  },
+                }}
+              >
+                {dom}
+              </Dropdown>
+            ) : (
+              <div onClick={() => router.push("/user/login")}>{dom}</div>
+            ),
         }}
         actionsRender={() => [
           <Input key="search" />,
@@ -60,11 +104,7 @@ export default function ProLayoutClient(props: BasicLayoutProps) {
         )}
         footerRender={() => <GlobalFooter />}
       >
-        <PageContainer>
-          <MdEditor value="# 标题\n测试markdown" />
-
-          {children}
-        </PageContainer>
+        <PageContainer>{children}</PageContainer>
       </ProLayout>
     </div>
   );

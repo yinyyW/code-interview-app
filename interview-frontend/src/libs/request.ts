@@ -1,6 +1,30 @@
 import axios from "axios";
 import { ResponseCode } from "../constant/ResponseCode";
 
+export interface ApiError {
+  code: string;
+  message: string;
+}
+
+export class ApiException<T = unknown> extends Error implements ApiError {
+  public readonly code: string;
+  public readonly data?: T;
+
+  constructor(code: string, message: string, data?: T) {
+    super(message);
+    this.code = code;
+    this.data = data;
+    Object.setPrototypeOf(this, ApiException.prototype);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, ApiException);
+    }
+  }
+
+  public static from<T>(error: ApiError & { data?: T }): ApiException<T> {
+    return new ApiException(error.code, error.message, error.data);
+  }
+}
+
 const myAxios = axios.create({
   baseURL: "http://localhost:8123/api",
   timeout: 60000,
@@ -24,7 +48,7 @@ myAxios.interceptors.response.use(
       }
     } else if (data.code !== ResponseCode.OK) {
       // 其他错误
-      throw new Error(data.message ?? "服务器错误");
+      throw new ApiException(data.code || "", data.message || "");
     }
     return response;
   },

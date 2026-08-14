@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ACCESS_ENUM from "../access/accessEnum";
 
-const DEFAULT_USER: API.UserVO = {
+export const DEFAULT_USER: API.UserVO = {
   userName: "未登录",
   userAvatar: "",
   userProfile: "暂无简介",
