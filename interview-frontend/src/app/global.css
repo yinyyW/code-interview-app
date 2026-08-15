@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+.max-width-content {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.home {
+  margin: 12px 0;
+}

@@ -8,18 +8,8 @@ export const menuItems: MenuDataItem[] = [
   },
 
   {
+    path: "/banks",
     name: "题库",
-    path: "/bank",
-    children: [
-      {
-        path: "/list/sub-page",
-        name: "面试题库",
-      },
-      {
-        path: "/list/sub-page2",
-        name: "笔试题库",
-      },
-    ],
   },
 
   {

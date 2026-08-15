@@ -1,1 +1,15 @@
+.ant-page-header {
+  display: none;
+}
 
+/* ProLayout 顶部导航的子菜单 */
+.ant-menu-submenu-popup > .ant-menu {
+  background: #fff !important;
+  opacity: 1 !important;
+}
+
+/* 子菜单容器 */
+.ant-menu-submenu-popup {
+  background: #fff !important;
+  opacity: 1 !important;
+}

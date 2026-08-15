@@ -2,7 +2,7 @@
 
 import { GithubFilled, LogoutOutlined } from "@ant-design/icons";
 import { PageContainer, ProLayout } from "@ant-design/pro-components";
-import { Dropdown, Input, message, theme } from "antd";
+import { Dropdown, message } from "antd";
 import { BasicLayoutProps } from ".";
 import Image from "next/image";
 import { menuItems } from "@/src/config/menu";
@@ -15,11 +15,12 @@ import { userLogout } from "@/src/api/userController";
 import { ResponseCode } from "@/src/constant/ResponseCode";
 import { DEFAULT_USER, setLoginUser } from "@/src/store/loginUser";
 import { ApiError } from "next/dist/server/api-utils";
+import "./index.css";
+import SearchInput from "@/src/components/SearchInput";
 
 export default function ProLayoutClient(props: BasicLayoutProps) {
   const { children } = props;
 
-  const { token } = theme.useToken();
   const router = useRouter();
   const loginUser = useAppSelector((state) => state.loginUser);
   const dispatch = useAppDispatch();
@@ -42,13 +43,7 @@ export default function ProLayoutClient(props: BasicLayoutProps) {
   };
 
   return (
-    <div
-      style={{
-        border: `1px solid ${token.colorBorderSecondary}`,
-        borderRadius: token.borderRadius,
-        height: "100vh",
-      }}
-    >
+    <div className="prolayout-wrapper">
       <ProLayout
         title="面试鸭刷题平台"
         logo={
@@ -56,7 +51,7 @@ export default function ProLayoutClient(props: BasicLayoutProps) {
             src="/assets/logo.png"
             height={32}
             width={32}
-            alt="面试鸭刷题网站 - 程序员鱼皮"
+            alt="面试鸭刷题网站"
           />
         }
         layout="top"
@@ -95,16 +90,16 @@ export default function ProLayoutClient(props: BasicLayoutProps) {
             ),
         }}
         actionsRender={() => [
-          <Input key="search" />,
+          <SearchInput key="search" />,
           <GithubFilled key="github" />,
         ]}
         menuDataRender={() => getAccessibleMenus(loginUser, menuItems)}
-        menuItemRender={(item, dom) => (
-          <Link href={item.path || "/"}>{dom}</Link>
-        )}
+        menuItemRender={(item, dom) => {
+          return <Link href={item.path || "/"}>{dom}</Link>;
+        }}
         footerRender={() => <GlobalFooter />}
       >
-        <PageContainer>{children}</PageContainer>
+        <PageContainer className="max-width-content">{children}</PageContainer>
       </ProLayout>
     </div>
   );

@@ -1,11 +1,71 @@
-import { Button } from "antd";
+import { Flex } from "antd";
+import Title from "antd/es/typography/Title";
+import Link from "next/link";
+import QuestionBankList from "../components/QuestionBankList";
+import QuestionList from "../components/QuestionList";
+import { listQuestionBankVoByPage } from "../api/questionBankController";
+import { listQuestionVoByPage } from "../api/questionController";
+import { ResponseCode } from "../constant/ResponseCode";
 
-export default function Home() {
+const QUESTION_BANK_LIST_PAGE_SIZE = 12;
+const QUESTION_LIST_PAGE_SIZE = 12;
+
+export default async function Home() {
+  let questionBanksList: API.QuestionBankVO[] = [];
+  let questionsList: API.QuestionVO[] = [];
+
+  // 获取题库列表
+  try {
+    const queryQuestionBanksParam: API.QuestionBankQueryRequest = {
+      pageNum: 1,
+      pageSize: QUESTION_BANK_LIST_PAGE_SIZE,
+    };
+    const questionBanksQueryResult = await listQuestionBankVoByPage(
+      queryQuestionBanksParam,
+    );
+    const questionBanksData = questionBanksQueryResult.data;
+    if (questionBanksData.code === ResponseCode.OK && questionBanksData.data) {
+      const questionBanksPageData = questionBanksData.data;
+      questionBanksList = questionBanksPageData.records || [];
+    }
+  } catch (e) {
+    console.log("获取题库列表异常", e);
+  }
+
+  // 获取题目列表
+  try {
+    const queryQuestionsParam: API.QuestionBankQueryRequest = {
+      pageNum: 1,
+      pageSize: QUESTION_LIST_PAGE_SIZE,
+    };
+    const questionsQueryResult =
+      await listQuestionVoByPage(queryQuestionsParam);
+    const questionsData = questionsQueryResult.data;
+    if (questionsData.code === ResponseCode.OK && questionsData.data) {
+      const questionsPageData = questionsData.data;
+      questionsList = questionsPageData.records || [];
+    }
+  } catch (e) {
+    console.log("获取题目列表异常", e);
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Button type="primary">主页</Button>
-      </main>
-    </div>
+    <main className="home">
+      <Flex justify="space-between" align="center">
+        <Title level={3}>最新题库</Title>
+        <Link href={"/banks"}>查看更多</Link>
+      </Flex>
+      <QuestionBankList questionBanks={questionBanksList} />
+
+      <Flex
+        justify="space-between"
+        align="flex-end"
+        style={{ marginTop: "36px" }}
+      >
+        <Title level={3}>最新题目</Title>
+        <Link href={"/questions"}>查看更多</Link>
+      </Flex>
+      <QuestionList questions={questionsList} />
+    </main>
   );
 }
