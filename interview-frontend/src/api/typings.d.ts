@@ -296,7 +296,7 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    id?: number;
+    id?: number | string;
     notId?: number;
     searchText?: string;
     title?: string;

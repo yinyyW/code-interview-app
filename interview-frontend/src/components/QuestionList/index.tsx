@@ -6,14 +6,16 @@ import "./index.css";
 import TagList from "../TagList";
 
 export interface QuestionListProps {
+  bankId?: string | number;
+  cardTitle?: string;
   questions: API.QuestionVO[];
 }
 
 export default function QuestionList(props: QuestionListProps) {
-  const { questions } = props;
+  const { questions, cardTitle } = props;
 
   return (
-    <Card className="question-list">
+    <Card className="question-list" title={cardTitle}>
       <Flex vertical align="flex-end">
         <Listy
           rowKey="id"

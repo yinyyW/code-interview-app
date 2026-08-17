@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar, Card, Col, Row, Typography } from "antd";
+import { useRouter } from "next/navigation";
 
 export interface QuestionBankListProps {
   questionBanks: API.QuestionBankVO[];
@@ -8,6 +9,7 @@ export interface QuestionBankListProps {
 
 export default function QuestionBankList(props: QuestionBankListProps) {
   const { questionBanks } = props;
+  const router = useRouter();
 
   return (
     <>
@@ -26,6 +28,9 @@ export default function QuestionBankList(props: QuestionBankListProps) {
             sm={12}
             md={8}
             lg={6}
+            onClick={() => {
+              router.push(`/bank/${questionBank.id}`);
+            }}
           >
             <Card hoverable>
               <Card.Meta
