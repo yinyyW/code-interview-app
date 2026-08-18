@@ -11,6 +11,10 @@
   margin: 0 auto;
 }
 
+.ant-pro-layout .ant-pro-layout-container {
+  min-height: 100vh !important;
+}
+
 .home {
   margin: 12px 0;
 }

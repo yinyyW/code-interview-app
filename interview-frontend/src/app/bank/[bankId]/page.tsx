@@ -51,8 +51,10 @@ export default async function BankPage({
   return (
     <div>
       <Card style={{ marginTop: "12px" }}>
-        <Flex gap={16}>
-          <Avatar src={bankDetail.picture} size={72} />
+        <Flex gap={24}>
+          <div style={{ width: 72, height: 72 }}>
+            <Avatar src={bankDetail.picture} size={72} />
+          </div>
           <div>
             <Title level={3}>{bankDetail.title}</Title>
             <Paragraph type="secondary">{bankDetail.description}</Paragraph>
@@ -74,6 +76,7 @@ export default async function BankPage({
           <QuestionList
             questions={questionListRecord.records || []}
             cardTitle={`题目列表 (${questionListRecord.total})`}
+            bankId={bankId}
           />
         )}
     </div>

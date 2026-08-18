@@ -12,7 +12,7 @@ export interface QuestionListProps {
 }
 
 export default function QuestionList(props: QuestionListProps) {
-  const { questions, cardTitle } = props;
+  const { bankId, questions, cardTitle } = props;
 
   return (
     <Card className="question-list" title={cardTitle}>
@@ -23,7 +23,13 @@ export default function QuestionList(props: QuestionListProps) {
           style={{ width: "100%" }}
           itemRender={(item, idx) => (
             <Flex justify="space-between" align="center">
-              <Link href={`/question/${item.id}`}>
+              <Link
+                href={
+                  bankId
+                    ? `/bank/${bankId}/question/${item.id}`
+                    : `/question/${item.id}`
+                }
+              >
                 {idx + 1}. {item.title}
               </Link>
               <TagList tagList={item.tagList || []} />

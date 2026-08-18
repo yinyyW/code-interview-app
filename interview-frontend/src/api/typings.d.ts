@@ -108,7 +108,7 @@ declare namespace API {
   };
 
   type getQuestionVOByIdParams = {
-    id: number;
+    id: number | string;
   };
 
   type getUserByIdParams = {
