@@ -18,12 +18,12 @@ export const menuItems: MenuDataItem[] = [
     access: ACCESS_ENUM.ADMIN,
     children: [
       {
-        path: "/admin/sub-page1",
+        path: "/admin/user",
         name: "用户管理",
         access: ACCESS_ENUM.ADMIN,
       },
       {
-        path: "/admin/sub-page2",
+        path: "/admin/bank",
         name: "题库管理",
         access: ACCESS_ENUM.ADMIN,
       },

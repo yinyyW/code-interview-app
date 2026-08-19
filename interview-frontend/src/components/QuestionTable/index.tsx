@@ -69,7 +69,7 @@ export default function QuestionTable(props: QuestionTableProps) {
   return (
     <div className="questions-table">
       <ProTable<API.QuestionVO>
-        rowKey="key"
+        rowKey="id"
         columns={columns}
         formRef={formRef}
         search={{
@@ -84,9 +84,6 @@ export default function QuestionTable(props: QuestionTableProps) {
           pageSize: PAGE_SIZE,
         }}
         request={async (params, sort, filter) => {
-          // console.log(
-          //   `request starts: ${JSON.stringify(params)}, ${JSON.stringify(sort)}, ${JSON.stringify(filter)}`,
-          // );
           if (init) {
             setInit(false);
             if (defaultQuestions && defaultTotal) {

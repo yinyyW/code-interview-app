@@ -17,7 +17,7 @@ export default async function Questions({
 
   // 获取题目列表
   try {
-    const queryQuestionsParam: API.QuestionBankQueryRequest = {
+    const queryQuestionsParam: API.QuestionQueryRequest = {
       pageNum: 1,
       pageSize: 12,
       sortField: "createTime",
