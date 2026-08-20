@@ -9,7 +9,7 @@ import {
   ProColumns,
   ProTable,
 } from "@ant-design/pro-components";
-import { Button, message, Popconfirm, Space, Typography } from "antd";
+import { Button, message, Popconfirm, Space } from "antd";
 import { useMemo, useRef, useState } from "react";
 import CreateModal from "./components/CreateModal";
 import UpdateModal from "./components/UpdateModal";
@@ -149,7 +149,7 @@ function UserAdminPage() {
   };
 
   return (
-    <PageContainer>
+    <PageContainer className="userAdmin">
       <ProTable<API.User>
         headerTitle={"查询表格"}
         rowKey={(record) => String(record.id)}
