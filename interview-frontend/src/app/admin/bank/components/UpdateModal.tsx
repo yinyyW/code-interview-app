@@ -1,7 +1,6 @@
 "use client";
 
 import { updateQuestionBank } from "@/src/api/questionBankController";
-import { updateUser } from "@/src/api/userController";
 import { ResponseCode } from "@/src/constant/ResponseCode";
 import { ProColumns, ProTable } from "@ant-design/pro-components";
 import { message, Modal } from "antd";

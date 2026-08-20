@@ -11,10 +11,6 @@ import ACCESS_ENUM from "@/src/access/accessEnum";
 import withAuth from "@/src/components/withAuth";
 import { useRef, useState } from "react";
 import { ResponseCode } from "@/src/constant/ResponseCode";
-import {
-  deleteQuestionBank,
-  listQuestionBankByPage,
-} from "@/src/api/questionBankController";
 import UpdateModal from "./components/UpdateModal";
 import CreateModal from "./components/CreateModal";
 import {
@@ -23,10 +19,14 @@ import {
 } from "@/src/api/questionController";
 import TagList from "@/src/components/TagList";
 import MdEditor from "@/src/components/MdEditor";
+import { listQuestionBankByPage } from "@/src/api/questionBankController";
+import UpdateQuestionBankModal from "./components/UpdateQuestionBankModal";
 
 function QuestionAdminPage() {
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+  const [updateQuestionBankModalVisible, setUpdateQuestionBankModalVisible] =
+    useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<API.User | null>(null);
 
   const questionRef = useRef<ActionType | undefined>(undefined);
@@ -50,6 +50,37 @@ function QuestionAdminPage() {
           </Tooltip>
         );
       },
+    },
+    {
+      title: "题库",
+      dataIndex: "questionBank",
+      valueType: "select",
+      request: async () => {
+        try {
+          const queryBanksResponse = await listQuestionBankByPage({
+            pageNum: 1,
+            pageSize: 100,
+          });
+          const queryBanksResult = queryBanksResponse.data;
+          if (
+            queryBanksResult.code === ResponseCode.OK &&
+            queryBanksResult.data
+          ) {
+            const questionBanksList = queryBanksResult.data.records || [];
+            return questionBanksList.map((item) => {
+              return {
+                label: item.title,
+                value: item.id,
+              };
+            });
+          }
+          return [];
+        } catch (e) {
+          return [];
+        }
+      },
+      hideInForm: true,
+      hideInTable: true,
     },
     {
       title: "内容",
@@ -127,7 +158,7 @@ function QuestionAdminPage() {
       dataIndex: "option",
       valueType: "option",
       render: (_, row) => (
-        <Space size="middle">
+        <Space size="small">
           <Button
             key="edit"
             type="link"
@@ -137,6 +168,16 @@ function QuestionAdminPage() {
             }}
           >
             修改
+          </Button>
+          <Button
+            key="editBank"
+            type="link"
+            onClick={() => {
+              setSelectedData(row);
+              setUpdateQuestionBankModalVisible(true);
+            }}
+          >
+            修改题库
           </Button>
           <Popconfirm
             key="delete"
@@ -200,6 +241,7 @@ function QuestionAdminPage() {
           const queryQuestionsResult = await listQuestionByPage({
             pageNum: params.current,
             pageSize: params.pageSize,
+            questionBankId: params.questionBank,
           });
           const queryQuestionsData = queryQuestionsResult.data;
           return {
@@ -230,6 +272,21 @@ function QuestionAdminPage() {
         }}
         onSubmit={(success) => {
           setUpdateModalVisible(false);
+          setSelectedData(null);
+          if (success) {
+            questionRef.current?.reload();
+          }
+        }}
+      />
+      <UpdateQuestionBankModal
+        questionId={selectedData?.id || ""}
+        visible={updateQuestionBankModalVisible}
+        onCancel={() => {
+          setUpdateQuestionBankModalVisible(false);
+          setSelectedData(null);
+        }}
+        onSubmit={(success) => {
+          setUpdateQuestionBankModalVisible(false);
           setSelectedData(null);
           if (success) {
             questionRef.current?.reload();

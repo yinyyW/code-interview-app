@@ -1,5 +1,6 @@
 package com.code.interview.model.vo;
 
+import com.code.interview.model.entity.QuestionBank;
 import com.code.interview.model.entity.QuestionBankQuestion;
 import org.springframework.beans.BeanUtils;
 import lombok.Data;
@@ -20,6 +21,11 @@ public class QuestionBankQuestionVO implements Serializable {
      * 题库 id
      */
     private Long questionBankId;
+
+    /**
+     * 题库名称
+     */
+    private QuestionBank questionBank;
 
     /**
      * 题目 id

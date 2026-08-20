@@ -316,8 +316,8 @@ declare namespace API {
   };
 
   type QuestionBankQuestionAddRequest = {
-    questionBankId?: number;
-    questionId?: number;
+    questionBankId?: number | string;
+    questionId?: number | string;
   };
 
   type QuestionBankQuestionQueryRequest = {
@@ -327,14 +327,14 @@ declare namespace API {
     sortOrder?: string;
     id?: number;
     notId?: number;
-    questionBankId?: number;
-    questionId?: number;
+    questionBankId?: number | string;
+    questionId?: number | string;
     userId?: number;
   };
 
   type QuestionBankQuestionRemoveRequest = {
-    questionBankId?: number;
-    questionId?: number;
+    questionBankId?: number | string;
+    questionId?: number | string;
   };
 
   type QuestionBankQuestionUpdateRequest = {
@@ -352,6 +352,7 @@ declare namespace API {
     updateTime?: string;
     tagList?: string[];
     user?: UserVO;
+    questionBank?: QuestionBankVO;
   };
 
   type QuestionBankUpdateRequest = {

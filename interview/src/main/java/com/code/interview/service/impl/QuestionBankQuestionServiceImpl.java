@@ -154,8 +154,11 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         }).collect(Collectors.toList());
 
         Set<Long> userIdSet = questionBankQuestionList.stream().map(QuestionBankQuestion::getUserId).collect(Collectors.toSet());
+        Set<Long> bankIdSet = questionBankQuestionList.stream().map(QuestionBankQuestion::getQuestionBankId).collect(Collectors.toSet());
         Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
+        Map<Long, List<QuestionBank>> bankIdBankListMap = questionBankService.listByIds(bankIdSet).stream()
+                .collect(Collectors.groupingBy(QuestionBank::getId));
         // 填充信息
         questionBankQuestionVOList.forEach(questionBankQuestionVO -> {
             Long userId = questionBankQuestionVO.getUserId();
@@ -164,6 +167,14 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
                 user = userIdUserListMap.get(userId).get(0);
             }
             questionBankQuestionVO.setUser(userService.getUserVO(user));
+        });
+        questionBankQuestionVOList.forEach(questionBankQuestionVO -> {
+            Long questionBankId = questionBankQuestionVO.getQuestionBankId();
+            QuestionBank questionBank = null;
+            if (bankIdBankListMap.containsKey(questionBankId)) {
+                questionBank = bankIdBankListMap.get(questionBankId).get(0);
+            }
+            questionBankQuestionVO.setQuestionBank(questionBank);
         });
 
         questionBankQuestionVOPage.setRecords(questionBankQuestionVOList);

@@ -1,4 +1,3 @@
-import { addQuestionBank } from "@/src/api/questionBankController";
 import { addQuestion } from "@/src/api/questionController";
 import { ResponseCode } from "@/src/constant/ResponseCode";
 import { ProColumns, ProTable } from "@ant-design/pro-components";
