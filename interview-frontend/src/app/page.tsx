@@ -14,39 +14,34 @@ export default async function Home() {
   let questionBanksList: API.QuestionBankVO[] = [];
   let questionsList: API.QuestionVO[] = [];
 
-  // 获取题库列表
+  // 获取首页题库和题目列表
   try {
     const queryQuestionBanksParam: API.QuestionBankQueryRequest = {
       pageNum: 1,
       pageSize: QUESTION_BANK_LIST_PAGE_SIZE,
     };
-    const questionBanksQueryResult = await listQuestionBankVoByPage(
-      queryQuestionBanksParam,
-    );
+    const queryQuestionsParam: API.QuestionQueryRequest = {
+      pageNum: 1,
+      pageSize: QUESTION_LIST_PAGE_SIZE,
+    };
+    const queryPromisesList = [
+      listQuestionBankVoByPage(queryQuestionBanksParam),
+      listQuestionVoByPage(queryQuestionsParam),
+    ];
+    const [questionBanksQueryResult, questionsQueryResult] =
+      await Promise.all(queryPromisesList);
     const questionBanksData = questionBanksQueryResult.data;
+    const questionsData = questionsQueryResult.data;
     if (questionBanksData.code === ResponseCode.OK && questionBanksData.data) {
       const questionBanksPageData = questionBanksData.data;
       questionBanksList = questionBanksPageData.records || [];
     }
-  } catch (e) {
-    console.log("获取题库列表异常", e);
-  }
-
-  // 获取题目列表
-  try {
-    const queryQuestionsParam: API.QuestionBankQueryRequest = {
-      pageNum: 1,
-      pageSize: QUESTION_LIST_PAGE_SIZE,
-    };
-    const questionsQueryResult =
-      await listQuestionVoByPage(queryQuestionsParam);
-    const questionsData = questionsQueryResult.data;
     if (questionsData.code === ResponseCode.OK && questionsData.data) {
       const questionsPageData = questionsData.data;
       questionsList = questionsPageData.records || [];
     }
   } catch (e) {
-    console.log("获取题目列表异常", e);
+    console.log("获取题库列表异常", e);
   }
 
   return (
